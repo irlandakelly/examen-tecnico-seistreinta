@@ -1,6 +1,6 @@
 const db = require("../models");
 const Event = db.events;
-const { Op } = db.Sequelize;
+const { Op } = db.Sequelize.Op;
 
 // Create and Save a new Event
 exports.create = (req, res) => {
@@ -102,35 +102,6 @@ exports.delete = (req, res) => {
     .catch((error) => {
       res.status(500).send({
         message: error.message || `Error deleting Event with id ${id}.`,
-      });
-    });
-};
-
-// Delete all Events from the database.
-exports.deleteAll = (req, res) => {
-  Event.destroy({
-    where: {},
-    truncate: false,
-  })
-    .then((result) => {
-      res.send({ message: `${result} Events were deleted successfully.` });
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: error.message || "Some error occurred while deleting all Events.",
-      });
-    });
-};
-
-// Find all published Events
-exports.findAllPublished = (req, res) => {
-  Event.findAll({ where: { published: true } })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: error.message || "Some error occurred while retrieving published Events.",
       });
     });
 };
