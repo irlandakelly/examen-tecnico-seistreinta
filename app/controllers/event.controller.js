@@ -1,13 +1,17 @@
 const db = require("../models");
 const Event = db.events;
 const { Op } = db.Sequelize.Op;
+const { validationResult } = require('express-validator');
+
 
 // Create and Save a new Event
 exports.create = (req, res) => {
+
   // Validate request
-  if (!req.body.title) {
-    res.status(400).send({ message: "Title can not be empty!" });
-    return;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ errors: errorMessages });
   }
 
   // Create an Event object
